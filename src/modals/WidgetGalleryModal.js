@@ -13,17 +13,15 @@ export default function WidgetGalleryModal({ setShowWidgetModal, selectedWidgetA
   ]
   return (
     <div className="modal" role="presentation"
-      onClick={(e) => {
-        setShowWidgetModal(false)
-      }}
+      onClick={() => setShowWidgetModal(false)}
     >
       <div className="modal-content" role="dialog" aria-modal="true" aria-labelledby="widget-gallery-title" onClick={(event) => event.stopPropagation()}>
         <div className="modal-header">
           <h2 id="widget-gallery-title">Widget Gallery</h2>
           <div>
-            {galleryWidgets.map((widget, index) => {
+            {galleryWidgets.map((widget) => {
               return (
-                <div key={index} className='widget-gallery-item'
+                <div key={widget.name} className='widget-gallery-item'
                   onClick={() => {
                     let flag = false
                     for (let i = 0; i < widgets.length; i++) {
