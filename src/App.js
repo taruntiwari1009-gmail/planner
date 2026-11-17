@@ -64,6 +64,7 @@ function App() {
        </Draggable>
       )
      }
+     return null;
     })}
    </div>
    <div className="App">
@@ -98,6 +99,7 @@ function App() {
          </div>
         )
        }
+       return null;
       })}
       {widgets.filter(widget => widget.area === 'left-widget').length < 3 && widgets.filter(widget => widget.area === 'left-widget').length > 0 &&
        <button
@@ -138,6 +140,7 @@ function App() {
          </div>
         )
        }
+       return null;
       })}
       {widgets.filter(widget => widget.area === 'main-widget').length < 2 &&
        <button
@@ -178,6 +181,7 @@ function App() {
          </div>
         )
        }
+       return null;
       })}
       {widgets.filter(widget => widget.area === 'right-widget').length < 3 && widgets.filter(widget => widget.area === 'right-widget').length > 0 &&
        <button
