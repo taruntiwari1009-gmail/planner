@@ -15,12 +15,8 @@ function App() {
  const [showWidgetModal, setShowWidgetModal] = useState(false)
  const [selectedWidgetArea, setSelectedWidgetArea] = useState('')
  
- const removeWidget = (index) => {
-  try {
-   setWidgets(widgets.filter(widget => widget.id !== index))
-  } catch (error) {
-   console.log(error)
-  }
+ const removeWidget = (id) => {
+  setWidgets(currentWidgets => currentWidgets.filter(widget => widget.id !== id))
  }
  
  return (
@@ -42,14 +38,15 @@ function App() {
     {widgets.length > 0 && widgets.map((widget, index) => {
      if (widget.area === 'none-widget') {
       return (
-       <Draggable>
-            <div style={{ padding: 10,}} className='widget-container' >
+       <Draggable key={widget.id}>
+            <div key={widget.id} style={{ padding: 10,}} className='widget-container' >
              <div style={{ marginBottom: 10 }}>
               <select value={widget.area}
                onChange={(e) => {
-                let widgetList = [...widgets]
-                widgetList[index].area = e.target.value
-                setWidgets(widgetList)
+                const nextArea = e.target.value
+                setWidgets(currentWidgets => currentWidgets.map(item =>
+                 item.id === widget.id ? { ...item, area: nextArea } : item
+                ))
                }}
               >
                <option value="none-widget">Floating</option>
@@ -77,7 +74,7 @@ function App() {
       {widgets.length > 0 && widgets.map((widget, index) => {
        if (widget.area === 'left-widget') {
         return (
-         <div style={{ padding: 10,}} className='widget-container'>
+         <div key={widget.id} style={{ padding: 10,}} className='widget-container'>
           <div style={{ marginBottom: 10 }}>
            <select value={widget.area}
             onChange={(e) => {
