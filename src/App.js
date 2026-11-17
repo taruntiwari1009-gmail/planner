@@ -15,41 +15,36 @@ function App() {
  const [showWidgetModal, setShowWidgetModal] = useState(false)
  const [selectedWidgetArea, setSelectedWidgetArea] = useState('')
  
- const removeWidget = (index) => {
-  try {
-   setWidgets(widgets.filter(widget => widget.id !== index))
-  } catch (error) {
-   console.log(error)
-  }
+ const removeWidget = (id) => {
+  setWidgets(currentWidgets => currentWidgets.filter(widget => widget.id !== id))
  }
  
  return (
   <>
    {showWidgetModal && <WidgetGalleryModal setShowWidgetModal={setShowWidgetModal} selectedWidgetArea={selectedWidgetArea} widgets={widgets} setWidgets={setWidgets} />}
-   <div className="add-button"
+   <button
+    type="button"
+    className="add-button"
+    aria-label="Add a widget to the floating area"
     onClick={() => {
-     console.log('add button clicked')
      setShowWidgetModal(true)
      setSelectedWidgetArea('none-widget')
     }}
-   >
-    <p
-     className='add-widget-button'
-     style={{ background: "none", border: "none", color: "black", fontSize: "30px", cursor: "pointer", backgroundColor: "white", borderRadius: "50%", width: "50px", display: "flex", justifyContent: "center", alignItems: "center", height: "50px", position: "fixed", bottom: "10px", right: "10px" }}
-    >+</p>
-   </div>
+    style={{ background: "white", border: "none", color: "#183A37", fontSize: "30px", cursor: "pointer", borderRadius: "50%", width: "50px", display: "flex", justifyContent: "center", alignItems: "center", height: "50px", position: "fixed", bottom: "10px", right: "10px", zIndex: 2 }}
+   >+</button>
    <div className='none-widget' >
-    {widgets.length > 0 && widgets.map((widget, index) => {
+    {widgets.length > 0 && widgets.map((widget) => {
      if (widget.area === 'none-widget') {
       return (
-       <Draggable>
-            <div style={{ padding: 10,}} className='widget-container' >
+       <Draggable key={widget.id}>
+            <div key={widget.id} style={{ padding: 10,}} className='widget-container' >
              <div style={{ marginBottom: 10 }}>
               <select value={widget.area}
                onChange={(e) => {
-                let widgetList = [...widgets]
-                widgetList[index].area = e.target.value
-                setWidgets(widgetList)
+                const nextArea = e.target.value
+                setWidgets(currentWidgets => currentWidgets.map(item =>
+                 item.id === widget.id ? { ...item, area: nextArea } : item
+                ))
                }}
               >
                <option value="none-widget">Floating</option>
@@ -69,21 +64,23 @@ function App() {
        </Draggable>
       )
      }
+     return null;
     })}
    </div>
    <div className="App">
     <div className="container">
      <div className='left-widget'>
-      {widgets.length > 0 && widgets.map((widget, index) => {
+      {widgets.length > 0 && widgets.map((widget) => {
        if (widget.area === 'left-widget') {
         return (
-         <div style={{ padding: 10,}} className='widget-container'>
+         <div key={widget.id} style={{ padding: 10,}} className='widget-container'>
           <div style={{ marginBottom: 10 }}>
            <select value={widget.area}
             onChange={(e) => {
-             let widgetList = [...widgets]
-             widgetList[index].area = e.target.value
-             setWidgets(widgetList)
+             const nextArea = e.target.value
+             setWidgets(currentWidgets => currentWidgets.map(item =>
+              item.id === widget.id ? { ...item, area: nextArea } : item
+             ))
             }}
            >
             <option value="none-widget">Floating</option>
@@ -102,6 +99,7 @@ function App() {
          </div>
         )
        }
+       return null;
       })}
       {widgets.filter(widget => widget.area === 'left-widget').length < 3 && widgets.filter(widget => widget.area === 'left-widget').length > 0 &&
        <button
@@ -113,16 +111,17 @@ function App() {
       }
      </div>
      <div className='main-widget'>
-      {widgets.length > 0 && widgets.map((widget, index) => {
+      {widgets.length > 0 && widgets.map((widget) => {
        if (widget.area === 'main-widget') {
         return (
-         <div style={{ padding: 10,}} className='widget-container' >
+         <div key={widget.id} style={{ padding: 10,}} className='widget-container' >
           <div style={{ marginBottom: 10 }}>
            <select value={widget.area}
             onChange={(e) => {
-             let widgetList = [...widgets]
-             widgetList[index].area = e.target.value
-             setWidgets(widgetList)
+             const nextArea = e.target.value
+             setWidgets(currentWidgets => currentWidgets.map(item =>
+              item.id === widget.id ? { ...item, area: nextArea } : item
+             ))
             }}
            >
             <option value="none-widget">Floating</option>
@@ -141,6 +140,7 @@ function App() {
          </div>
         )
        }
+       return null;
       })}
       {widgets.filter(widget => widget.area === 'main-widget').length < 2 &&
        <button
@@ -152,16 +152,17 @@ function App() {
       }
      </div>
      <div className='right-widget'>
-      {widgets.length > 0 && widgets.map((widget, index) => {
+      {widgets.length > 0 && widgets.map((widget) => {
        if (widget.area === 'right-widget') {
         return (
-         <div style={{ padding: 10,}} className='widget-container'>
+         <div key={widget.id} style={{ padding: 10,}} className='widget-container'>
           <div style={{ marginBottom: 10 }}>
            <select value={widget.area}
             onChange={(e) => {
-             let widgetList = [...widgets]
-             widgetList[index].area = e.target.value
-             setWidgets(widgetList)
+             const nextArea = e.target.value
+             setWidgets(currentWidgets => currentWidgets.map(item =>
+              item.id === widget.id ? { ...item, area: nextArea } : item
+             ))
             }}
            >
             <option value="none-widget">Floating</option>
@@ -180,6 +181,7 @@ function App() {
          </div>
         )
        }
+       return null;
       })}
       {widgets.filter(widget => widget.area === 'right-widget').length < 3 && widgets.filter(widget => widget.area === 'right-widget').length > 0 &&
        <button
