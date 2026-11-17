@@ -1,87 +1,82 @@
-import React, { useEffect, useState } from 'react'
- 
+import React, { useEffect, useState } from "react";
+
+const readReminders = () => {
+  try {
+    const stored = window.localStorage.getItem("reminderList");
+    const parsed = stored ? JSON.parse(stored) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error("Could not read saved reminders:", error);
+    return [];
+  }
+};
+
 export default function ReminderListWidget() {
-  const [reminderListData, setReminderListData] = useState()
- 
+  const [reminderListData, setReminderListData] = useState(readReminders);
+
   useEffect(() => {
-    let reminderList = [];
     try {
-      const storedReminders = localStorage.getItem("reminderList");
-      reminderList = storedReminders ? JSON.parse(storedReminders) : [];
-      if (!Array.isArray(reminderList)) reminderList = [];
+      window.localStorage.setItem("reminderList", JSON.stringify(reminderListData));
     } catch (error) {
-      console.error("Could not read saved reminders:", error);
+      console.error("Could not save reminders:", error);
     }
-    setReminderListData(reminderList)
-  }, [])
- 
-  useEffect(() => {
-    if (!reminderListData) {
-      return
-    }
-    localStorage.setItem('reminderList', JSON.stringify(reminderListData))
-  }, [reminderListData])
- 
+  }, [reminderListData]);
+
+  const addReminder = () => {
+    setReminderListData((current) => [
+      ...current,
+      { id: `${Date.now()}-${current.length}`, title: "", datestamp: "" },
+    ]);
+  };
+
+  const updateReminder = (id, title) => {
+    setReminderListData((current) =>
+      current.map((reminder, index) =>
+        (reminder.id ?? String(index)) === id
+          ? { ...reminder, title, datestamp: new Date().toISOString() }
+          : reminder
+      )
+    );
+  };
+
+  const removeReminder = (id) => {
+    setReminderListData((current) =>
+      current.filter((reminder, index) => (reminder.id ?? String(index)) !== id)
+    );
+  };
+
   return (
-    <div style={{ minWidth: 300 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "row" }}>
+    <div className="reminder-widget" style={{ minWidth: 300 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <p>Reminder List</p>
-        <button
-          style={{
-            background: "none",
-            border: "none",
-            color: "white",
-            fontSize: "15px",
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            setReminderListData([...reminderListData, {
-              title: '',
-              datestamp: '',
-            }])
-          }}
-        >+ New</button>
+        <button type="button" onClick={addReminder}>+ New</button>
       </div>
-      {reminderListData?.length > 0 && reminderListData.map((reminder, index) => {
-        return (
-          <div className='reminder-container' key={index}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "row" }}>
-              <input className='text-input' value={reminder.title}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    let reminderList = [...reminderListData]
-                    reminderList[index].title = e.target.value
-                    reminderList[index].datestamp = new Date()
-                    setReminderListData([...reminderList, {
-                      title: '',
-                      datestamp: '',
-                    }])
-                  }
-                }}
-                onChange={(e) => {
-                  let reminderList = [...reminderListData]
-                  reminderList[index].title = e.target.value
-                  reminderList[index].datestamp = new Date()
-                  setReminderListData(reminderList)
-                }} />
-              <button
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "white",
-                  fontSize: "15px",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  let reminderList = [...reminderListData]
-                  reminderList.splice(index, 1)
-                  setReminderListData(reminderList)
-                }}
-              >X</button>
+      {reminderListData.length === 0 ? (
+        <p className="reminder-empty">No reminders yet.</p>
+      ) : (
+        reminderListData.map((reminder, index) => {
+          const reminderId = reminder.id ?? String(index);
+          return (
+            <div className="reminder-container" key={reminderId}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <input
+                  className="text-input"
+                  aria-label={`Reminder ${index + 1}`}
+                  value={reminder.title || ""}
+                  onChange={(event) => updateReminder(reminderId, event.target.value)}
+                />
+                <button
+                  type="button"
+                  aria-label={`Delete reminder ${index + 1}`}
+                  onClick={() => removeReminder(reminderId)}
+                >
+                  ×
+                </button>
+              </div>
             </div>
-          </div>
-        )
-      })}
+          );
+        })
+      )}
     </div>
-  )
+  );
 }
