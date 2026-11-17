@@ -155,3 +155,92 @@ select {
   font-weight: bold;
   margin-bottom: 10px;
 }
+
+/* Responsive dashboard layout */
+.App {
+  min-height: 100vh;
+  height: auto;
+  align-items: stretch;
+}
+
+.container {
+  min-height: 100vh;
+  height: auto;
+  max-height: none;
+  align-items: stretch;
+}
+
+.left-widget,
+.main-widget,
+.right-widget {
+  flex: 1 1 280px;
+  max-width: none;
+  min-width: 0;
+  justify-content: flex-start;
+}
+
+.widget-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.time {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+}
+
+.modal-content {
+  width: min(92%, 680px);
+  max-height: 75vh;
+  border-radius: 12px;
+}
+
+.calendar-widget {
+  color: white;
+}
+
+.calendar-selected-date {
+  margin-top: 0.75rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.timer-controls button,
+.reminder-widget button,
+.widget-container button,
+.widget-container select {
+  cursor: pointer;
+  padding: 0.35rem 0.6rem;
+}
+
+.timer-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (max-width: 720px) {
+  .App {
+    min-height: 100vh;
+  }
+
+  .container {
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .left-widget,
+  .main-widget,
+  .right-widget {
+    width: 100%;
+    max-width: none;
+    align-items: stretch;
+  }
+
+  .widget-container {
+    overflow: hidden;
+  }
+
+  .modal {
+    padding-top: 2rem;
+  }
+}
