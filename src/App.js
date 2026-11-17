@@ -69,7 +69,7 @@ function App() {
    <div className="App">
     <div className="container">
      <div className='left-widget'>
-      {widgets.length > 0 && widgets.map((widget, index) => {
+      {widgets.length > 0 && widgets.map((widget) => {
        if (widget.area === 'left-widget') {
         return (
          <div key={widget.id} style={{ padding: 10,}} className='widget-container'>
@@ -109,16 +109,17 @@ function App() {
       }
      </div>
      <div className='main-widget'>
-      {widgets.length > 0 && widgets.map((widget, index) => {
+      {widgets.length > 0 && widgets.map((widget) => {
        if (widget.area === 'main-widget') {
         return (
          <div key={widget.id} style={{ padding: 10,}} className='widget-container' >
           <div style={{ marginBottom: 10 }}>
            <select value={widget.area}
             onChange={(e) => {
-             let widgetList = [...widgets]
-             widgetList[index].area = e.target.value
-             setWidgets(widgetList)
+             const nextArea = e.target.value
+             setWidgets(currentWidgets => currentWidgets.map(item =>
+              item.id === widget.id ? { ...item, area: nextArea } : item
+             ))
             }}
            >
             <option value="none-widget">Floating</option>
@@ -148,16 +149,17 @@ function App() {
       }
      </div>
      <div className='right-widget'>
-      {widgets.length > 0 && widgets.map((widget, index) => {
+      {widgets.length > 0 && widgets.map((widget) => {
        if (widget.area === 'right-widget') {
         return (
          <div key={widget.id} style={{ padding: 10,}} className='widget-container'>
           <div style={{ marginBottom: 10 }}>
            <select value={widget.area}
             onChange={(e) => {
-             let widgetList = [...widgets]
-             widgetList[index].area = e.target.value
-             setWidgets(widgetList)
+             const nextArea = e.target.value
+             setWidgets(currentWidgets => currentWidgets.map(item =>
+              item.id === widget.id ? { ...item, area: nextArea } : item
+             ))
             }}
            >
             <option value="none-widget">Floating</option>
