@@ -1,25 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ClockWidget from '../widgets/ClockWidget'
 import ReminderListWidget from '../widgets/ReminderListWidget'
 import TimerWidget from '../widgets/TimerWidget'
 import CalendarWidget from '../widgets/CalendarWidget'
 
 export default function WidgetGalleryModal({ setShowWidgetModal, selectedWidgetArea, widgets, setWidgets }) {
-  const [galleryWidgets, setGalleryWidgets] = useState([
+  const galleryWidgets = [
     { component: <ClockWidget />, name: "Date and Time" },
     { component: <ReminderListWidget />, name: "Reminder List" },
     { component: <TimerWidget />, name: "Timer" },
     { component: <CalendarWidget />, name: "Calendar" },
-  ])
+  ]
   return (
-    <div className="modal"
+    <div className="modal" role="presentation"
       onClick={(e) => {
         setShowWidgetModal(false)
       }}
     >
-      <div className="modal-content">
+      <div className="modal-content" role="dialog" aria-modal="true" aria-labelledby="widget-gallery-title" onClick={(event) => event.stopPropagation()}>
         <div className="modal-header">
-          <h2>Widget Gallery</h2>
+          <h2 id="widget-gallery-title">Widget Gallery</h2>
           <div>
             {galleryWidgets.map((widget, index) => {
               return (
